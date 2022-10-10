@@ -30,46 +30,6 @@ resource "aws_efs_access_point" "app" {
   }
 }
 
-resource "aws_efs_access_point" "jenkins" {
-  file_system_id = aws_efs_file_system.jumbo_efs.id
-  root_directory {
-    path = "/efs/jenkins"
-    creation_info {
-      owner_gid   = 1000
-      owner_uid   = 1000
-      permissions = "777"
-    }
-
-  }
-  posix_user {
-    gid = 1000
-    uid = 1000
-  }
-  tags = {
-    Name = "${var.app_name}-jenkins-access-point"
-  }
-}
-resource "aws_efs_access_point" "grafana" {
-  file_system_id = aws_efs_file_system.jumbo_efs.id
-  root_directory {
-    path = "/efs/grafana"
-    creation_info {
-      owner_gid   = 1000
-      owner_uid   = 1000
-      permissions = "777"
-    }
-
-  }
-  posix_user {
-    gid = 1000
-    uid = 1000
-  }
-  tags = {
-    Name = "${var.app_name}-grafana-access-point"
-  }
-}
-
-
 resource "aws_efs_file_system_policy" "policy" {
   file_system_id = aws_efs_file_system.jumbo_efs.id
 

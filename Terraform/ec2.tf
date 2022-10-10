@@ -10,13 +10,53 @@ resource "aws_instance" "master" {
 
   user_data = <<EOF
 #!/bin/bash
-sudo apt install amazon-efs-utils -y
-echo "Mount NFS"
-sudo mount -t efs -o tls ${aws_efs_access_point.app.id}:/ /mnt/efs
+sudo apt-get update
+sudo apt-get -y install git binutils
+git clone https://github.com/aws/efs-utils
+cd efs-utils
+./build-deb.sh
+sudo apt-get -y install ./build/amazon-efs-utils*deb
+pip3 install botocore
+sudo mount -t efs -o tls ${aws_efs_access_point.app.id}:/ /mnt
 EOF
 
   tags = {
     Name = "master"
+  }
+}
+
+data "aws_iam_policy_document" "EC2EFSPolicyDoc" {
+  statement {
+    actions = [
+      "elasticfilesystem:ClientMount",
+      "elasticfilesystem:ClientWrite",
+      "elasticfilesystem:ClientRootAccess",
+    ]
+    resources = [
+      "*"
+    ]
+  }
+}
+
+resource "aws_iam_role" "ec2_role" {
+  assume_role_policy = data.aws_iam_policy_document.EC2TrustPolicy.json
+  name               = "${var.app_name}-ec2-iam-role"
+
+  inline_policy {
+    name   = "efs-policy"
+    policy = data.aws_iam_policy_document.EC2EFSPolicyDoc.json
+  }
+}
+
+data "aws_iam_policy_document" "EC2TrustPolicy" {
+  version = "2012-10-17"
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
   }
 }
 
