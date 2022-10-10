@@ -65,6 +65,8 @@ resource "aws_lambda_function" "consumer" {
     security_group_ids = [aws_security_group.efs-sg.id]
   }
 
+  depends_on = [aws_efs_mount_target.jumbo_mount]
+
   environment {
     variables = {
       QUEUE_URL = aws_sqs_queue.queue.id

@@ -1,26 +1,40 @@
-
 resource "aws_instance" "master" {
-  ami           = "ami-0caef02b518350c8b"
-  instance_type = "t2.micro"
+  ami                         = "ami-0caef02b518350c8b"
+  instance_type               = "t2.micro"
+  associate_public_ip_address = true
 
-  network_interface {
-    device_index         = 0
-    network_interface_id = aws_network_interface.eth0.id
-  }
+  key_name = aws_key_pair.master.key_name
+
+  security_groups = ["${aws_security_group.master.id}"]
+  subnet_id       = aws_subnet.public[0].id
+
+  user_data = <<EOF
+#!/bin/bash
+sudo apt install amazon-efs-utils -y
+echo "Mount NFS"
+sudo mount -t efs -o tls ${aws_efs_access_point.app.id}:/ /mnt/efs
+EOF
+
   tags = {
     Name = "master"
   }
 }
 
-
-
-resource "aws_network_interface" "eth0" {
-  subnet_id       = aws_subnet.public[0].id
-  private_ips     = ["10.10.1.109"]
-  security_groups = [aws_security_group.master_sg.id]
+resource "tls_private_key" "key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+resource "local_file" "private_key" {
+  filename          = "jumbo_key.pem"
+  sensitive_content = tls_private_key.key.private_key_pem
+  file_permission   = "0404"
+}
+resource "aws_key_pair" "master" {
+  key_name   = "jumbo_key"
+  public_key = tls_private_key.key.public_key_openssh
 }
 
-resource "aws_security_group" "master_sg" {
+resource "aws_security_group" "master" {
   name        = "${var.app_name}-master"
   description = "Allow all inbound traffic"
   vpc_id      = aws_vpc.jumbo_vpc.id
