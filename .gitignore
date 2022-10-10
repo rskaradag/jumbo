@@ -23,3 +23,4 @@ terraform.rc
 
 *consumer.zip*
 */aws/*
+*.pem*

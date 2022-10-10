@@ -4,6 +4,11 @@ variable "aws_region" {
 variable "aws_account_id" {
   default = "600210043783"
 }
+variable "AWS_SECRET_ACCESS_KEY" {
+}
+variable "AWS_ACCESS_KEY_ID" {
+
+}
 variable "app_name" {
   default = "myjumbo"
 }
