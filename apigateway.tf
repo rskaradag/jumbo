@@ -1,17 +1,16 @@
-
-resource "aws_api_gateway_rest_api" "api" {
+resource "aws_api_gateway_rest_api" "producer" {
   name        = "${var.app_name}-api"
   description = "POST records to SQS queue"
 }
 
-resource "aws_api_gateway_request_validator" "api" {
-  rest_api_id           = aws_api_gateway_rest_api.api.id
+resource "aws_api_gateway_request_validator" "producer" {
+  rest_api_id           = aws_api_gateway_rest_api.producer.id
   name                  = "payload-validator"
   validate_request_body = true
 }
 
-resource "aws_api_gateway_model" "api" {
-  rest_api_id  = aws_api_gateway_rest_api.api.id
+resource "aws_api_gateway_model" "producer" {
+  rest_api_id  = aws_api_gateway_rest_api.producer.id
   name         = "PayloadValidator"
   description  = "validate the json body content conforms to the below spec"
   content_type = "application/json"
@@ -20,37 +19,33 @@ resource "aws_api_gateway_model" "api" {
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
-  "required": [ "id", "docs"],
+  "required": [ "id", "file"],
   "properties": {
     "id": { "type": "string" },
-    "docs": {
-      "minItems": 1,
-      "type": "array",
-      "items": {
-        "type": "object"
-      }
+    "file": { "type": "string" }
     }
-  }
 }
+
+
 EOF
 }
 
-resource "aws_api_gateway_method" "api" {
-  rest_api_id          = aws_api_gateway_rest_api.api.id
-  resource_id          = aws_api_gateway_rest_api.api.root_resource_id
+resource "aws_api_gateway_method" "producer" {
+  rest_api_id          = aws_api_gateway_rest_api.producer.id
+  resource_id          = aws_api_gateway_rest_api.producer.root_resource_id
   api_key_required     = false
   http_method          = "POST"
   authorization        = "NONE"
-  request_validator_id = aws_api_gateway_request_validator.api.id
+  request_validator_id = aws_api_gateway_request_validator.producer.id
 
   request_models = {
-    "application/json" = "${aws_api_gateway_model.api.name}"
+    "application/json" = "${aws_api_gateway_model.producer.name}"
   }
 }
 
-resource "aws_api_gateway_integration" "api" {
-  rest_api_id             = aws_api_gateway_rest_api.api.id
-  resource_id             = aws_api_gateway_rest_api.api.root_resource_id
+resource "aws_api_gateway_integration" "producer" {
+  rest_api_id             = aws_api_gateway_rest_api.producer.id
+  resource_id             = aws_api_gateway_rest_api.producer.root_resource_id
   http_method             = "POST"
   type                    = "AWS"
   integration_http_method = "POST"
@@ -68,9 +63,9 @@ resource "aws_api_gateway_integration" "api" {
 }
 
 resource "aws_api_gateway_integration_response" "success" {
-  rest_api_id       = aws_api_gateway_rest_api.api.id
-  resource_id       = aws_api_gateway_rest_api.api.root_resource_id
-  http_method       = aws_api_gateway_method.api.http_method
+  rest_api_id       = aws_api_gateway_rest_api.producer.id
+  resource_id       = aws_api_gateway_rest_api.producer.root_resource_id
+  http_method       = aws_api_gateway_method.producer.http_method
   status_code       = aws_api_gateway_method_response.success.status_code
   selection_pattern = "^2[0-9][0-9]"
 
@@ -78,13 +73,13 @@ resource "aws_api_gateway_integration_response" "success" {
     "application/json" = "{\"message\": \"great success!\"}"
   }
 
-  depends_on = ["aws_api_gateway_integration.api"]
+  depends_on = ["aws_api_gateway_integration.producer"]
 }
 
 resource "aws_api_gateway_method_response" "success" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_rest_api.api.root_resource_id
-  http_method = aws_api_gateway_method.api.http_method
+  rest_api_id = aws_api_gateway_rest_api.producer.id
+  resource_id = aws_api_gateway_rest_api.producer.root_resource_id
+  http_method = aws_api_gateway_method.producer.http_method
   status_code = 200
 
   response_models = {
@@ -92,11 +87,11 @@ resource "aws_api_gateway_method_response" "success" {
   }
 }
 
-resource "aws_api_gateway_deployment" "api" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
+resource "aws_api_gateway_deployment" "producer" {
+  rest_api_id = aws_api_gateway_rest_api.producer.id
   stage_name  = "main"
 
   depends_on = [
-    "aws_api_gateway_integration.api",
+    "aws_api_gateway_integration.producer"
   ]
 }
