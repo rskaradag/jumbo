@@ -32,7 +32,7 @@ variable "private_subnets" {
   default     = ["10.10.2.0/24", "10.10.4.0/24"]
   description = "Private Subnet Blocks"
 }
-variable key_name {
-default     = "LL-TEST"
-type = string
+variable "key_name" {
+  default = "LL-TEST"
+  type    = string
 }
