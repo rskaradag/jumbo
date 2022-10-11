@@ -58,8 +58,8 @@ jobs:
       
     - name: Set env
       run: |
-        echo "apigateway_url=$(terraform output apigateway_url | tr -d '"')" >> $GITHUB_ENV
-        echo "lb_url=$(terraform output lb_url | tr -d '"')" >> $GITHUB_ENV
+        echo "apigateway_url=$(terraform output apigateway_url)" >> $GITHUB_ENV
+        echo "lb_url=$(terraform output lb_url)" >> $GITHUB_ENV
         
     - name: Queue Test
       working-directory: Terraform/
