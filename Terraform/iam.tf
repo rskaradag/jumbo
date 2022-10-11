@@ -42,17 +42,9 @@ resource "aws_iam_policy" "api" {
         "Effect": "Allow",
         "Action": [
           "sqs:GetQueueUrl",
-          "sqs:ChangeMessageVisibility",
-          "sqs:ListDeadLetterSourceQueues",
           "sqs:SendMessageBatch",
-          "sqs:PurgeQueue",
-          "sqs:ReceiveMessage",
           "sqs:SendMessage",
-          "sqs:GetQueueAttributes",
-          "sqs:CreateQueue",
-          "sqs:ListQueueTags",
-          "sqs:ChangeMessageVisibilityBatch",
-          "sqs:SetQueueAttributes"
+          "sqs:ListQueueTags"
         ],
         "Resource": "${aws_sqs_queue.queue.arn}"
       }     
@@ -89,7 +81,7 @@ EOF
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
     "arn:aws:iam::aws:policy/AmazonElasticFileSystemFullAccess",
-    "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+    "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
   ]
 
 }
@@ -116,7 +108,7 @@ EOF
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
     "arn:aws:iam::aws:policy/AmazonElasticFileSystemFullAccess",
-    "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+    "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
   ]
 }
 
