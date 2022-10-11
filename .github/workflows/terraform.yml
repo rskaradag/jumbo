@@ -56,13 +56,18 @@ jobs:
       if: github.ref == 'refs/heads/"master"' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false
       
+    #- name: Set env
+    #  run: |
+    #    echo "apigateway_url=$(terraform output apigateway_url)" >> $GITHUB_ENV
+    #    echo "lb_url=$(terraform output lb_url)" >> $GITHUB_ENV
     - name: Set env
       run: |
-        echo "apigateway_url=$(terraform output apigateway_url)" >> $GITHUB_ENV
-        echo "lb_url=$(terraform output lb_url)" >> $GITHUB_ENV
-        
+        export apigateway_url=$(terraform output apigateway_url)
+        export lb_url=$(terraform output lb_url)
+        echo "$lb_url"
+    
     - name: Queue Test
       working-directory: Terraform/
       run: |
-        for var in {1..10}; do curl -X POST -H 'Content-Type: application/json' -d '{"id":"random", "file":"file$var"}' $apigateway_url; done
-        for var in {1..10}; do curl -X GET -H 'Content-Type: application/json' $lb_url$random/file$var; if [ $? -eq 0 ]; then echo "OK"; else exit 1; fi done
+        for var in {1..10}; do curl -X POST -H 'Content-Type: application/json' -d '{"id":"random", "file":"file$var"}' "$apigateway_url"; done
+        for var in {1..10}; do curl -X GET -H 'Content-Type: application/json' "$lb_url"random/file"$var"; if [ $? -eq 0 ]; then echo "OK"; else exit 1; fi done
