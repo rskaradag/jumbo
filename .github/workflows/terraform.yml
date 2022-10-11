@@ -59,8 +59,8 @@ jobs:
     - name: Queue Test
       working-directory: Terraform/
       run: |
-        apigateway_url=$(terraform output apigateway_url)
-        lb_url=$(terraform output lb_url)
+        apigateway_url=$(terraform output apigateway_url | tr -d '"')
+        lb_url=$(terraform output lb_url | tr -d '"')
         echo $apigateway
         echo $lb_url
         for var in {1..10}; do curl -X POST -H 'Content-Type: application/json' -d '{"id":"random", "file":"file$var"}' $apigateway_url; done
