@@ -6,9 +6,9 @@ on:
     paths:
         - JumboServer/**
 env:
-  TF_VAR_AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  TF_VAR_AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  TF_VAR_aws_region: ${{ secrets.AWS_REGION }} 
+  aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  aws_region: ${{ secrets.AWS_REGION }} 
   ecr_url: ${{ secrets.ECR_URL }} 
   app_name: ${{ secrets.APP_NAME }} 
   
