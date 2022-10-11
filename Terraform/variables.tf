@@ -1,8 +1,4 @@
 variable "aws_region" {
-  default = "eu-central-1"
-}
-variable "aws_account_id" {
-  default = "600210043783"
 }
 variable "AWS_SECRET_ACCESS_KEY" {
 }
