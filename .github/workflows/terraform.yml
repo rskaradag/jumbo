@@ -62,6 +62,7 @@ jobs:
     #    echo "lb_url=$(terraform output lb_url)" >> $GITHUB_ENV
     - name: Set env
       run: |
+        terraform refresh
         export apigateway_url=$(terraform output apigateway_url)
         export lb_url=$(terraform output lb_url)
         echo "$lb_url"
