@@ -1,3 +1,3 @@
 # jumbo
 The Architecture is as below:
-![alt text](https://github.com/rskaradag/jumbo/blob/master/image.jpg?raw=true)
+![Data Flow](https://github.com/rskaradag/jumbo/blob/master/data-flow.PNG?raw=true)
