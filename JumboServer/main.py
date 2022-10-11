@@ -8,6 +8,13 @@ app = Flask(__name__)
 def get_files():
     return os.listdir("/mnt/efs")
 
+@app.route('/<string:id>/<string:filename>', methods=['GET'])
+def get_file(id,filename):
+    if os.path.isfile("/mnt/efs/" + id + "-" + filename):
+        return jsonify(Operation="The file exists"), 200
+    else:
+        return jsonify(Operation="The file is not exist"), 400
+
 @app.route('/', methods=['DELETE'])
 def delete_file():
     try:
