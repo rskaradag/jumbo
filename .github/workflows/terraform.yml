@@ -11,6 +11,8 @@ env:
   TF_VAR_AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   TF_VAR_AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_VAR_aws_region: ${{ secrets.AWS_REGION }} 
+  apigateway_url: ${{ secrets.APIGATEWAY_URL }} 
+  lb_url: ${{ secrets.LB_URL }} 
   
 jobs:
   terraform:
@@ -55,3 +57,19 @@ jobs:
       working-directory: Terraform/
       if: github.ref == 'refs/heads/"master"' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false
+      
+    - name: Queue Test - POST
+      working-directory: Terraform/
+      run: for var in {1..10}; do if [ $(curl -X POST -H 'Content-Type: application/json' -d '{"id":"random", "file":"file'$var'"}' $apigateway_url -o /dev/null -s -w "%{http_code}\n") -eq 200 ]; then echo "PASSED"; else break; fi done
+        
+    - name: Queue Test - GET
+      working-directory: Terraform/
+      run: for var in {1..10}; do if [ $(curl -X GET -H 'Content-Type: application/json' $(echo $lb_url)random/file$(echo $var) -o /dev/null -s -w "%{http_code}\n") -eq 200 ]; then echo "PASSED"; else break; fi done
+    
+    - name: Queue Test - DELETE
+      working-directory: Terraform/
+      run: for var in {1..10}; do if [ $(curl -X DELETE -H 'Content-Type: application/json' -d '{"id":"random", "file":"file'$var'"}' $lb_url -o /dev/null -s -w "%{http_code}\n") -eq 204 ]; then echo "PASSED"; else break; fi done
+    
+    - name: Queue Test - GET
+      working-directory: Terraform/
+      run: for var in {1..10}; do if [ $(curl -X GET -H 'Content-Type: application/json' $(echo $lb_url)random/file$(echo $var) -o /dev/null -s -w "%{http_code}\n") -eq 400 ]; then echo "PASSED"; else break; fi done
