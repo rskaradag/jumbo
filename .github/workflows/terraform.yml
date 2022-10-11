@@ -3,6 +3,7 @@ name: 'Terraform'
 on:
   push:
     branches: [ "master" ]
+    paths: Terraform/**
   pull_request:
 
 permissions:
