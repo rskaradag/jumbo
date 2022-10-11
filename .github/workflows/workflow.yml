@@ -80,3 +80,20 @@ jobs:
           service: ${{ secrets.ECS_SERVICE }}
           cluster: ${{ secrets.ECS_CLUSTER }}
           wait-for-service-stability: true
+  tests:
+    name: "Data Flow test"
+    runs-on: ubuntu-latest
+    environment: production
+    needs: ci
+    defaults:
+      run:
+        shell: bash
+        
+    steps:
+      - uses: actions/checkout@v3
+      - name: Execute Script
+        working-directory: Terraform/
+        run: |
+           chmod +x ./test.sh
+           ./test.sh
+        shell: bash
