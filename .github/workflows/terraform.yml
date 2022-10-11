@@ -61,5 +61,7 @@ jobs:
       run: |
         apigateway_url=$(terraform output apigateway_url)
         lb_url=$(terraform output lb_url)
+        echo $apigateway
+        echo $lb_url
         for var in {1..10}; do curl -X POST -H 'Content-Type: application/json' -d '{"id":"random", "file":"file$var"}' $apigateway_url; done
         for var in {1..10}; do curl -X GET -H 'Content-Type: application/json' $lb_url$random/file$var; if [ $? -eq 0 ]; then echo "OK"; else exit 1; fi done
