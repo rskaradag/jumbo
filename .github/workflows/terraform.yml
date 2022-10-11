@@ -57,19 +57,18 @@ jobs:
       working-directory: Terraform/
       if: github.ref == 'refs/heads/"master"' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false
-      
-    - name: Queue Test - POST
-      working-directory: Terraform/
-      run: for var in {1..10}; do if [ $(curl -X POST -H 'Content-Type: application/json' -d '{"id":"random", "file":"file'$var'"}' $apigateway_url -o /dev/null -s -w "%{http_code}\n") -eq 200 ]; then echo "PASSED"; else break; fi done
+  tests:
+    name: "Data Flow test"
+    runs-on: ubuntu-latest
+    environment: production
+    needs: terraform
+    defaults:
+      run:
+        shell: bash
         
-    - name: Queue Test - GET
-      working-directory: Terraform/
-      run: for var in {1..10}; do if [ $(curl -X GET -H 'Content-Type: application/json' $(echo $lb_url)random/file$(echo $var) -o /dev/null -s -w "%{http_code}\n") -eq 200 ]; then echo "PASSED"; else break; fi done
-    
-    - name: Queue Test - DELETE
-      working-directory: Terraform/
-      run: for var in {1..10}; do if [ $(curl -X DELETE -H 'Content-Type: application/json' -d '{"id":"random", "file":"file'$var'"}' $lb_url -o /dev/null -s -w "%{http_code}\n") -eq 204 ]; then echo "PASSED"; else break; fi done
-    
-    - name: Queue Test - GET
-      working-directory: Terraform/
-      run: for var in {1..10}; do if [ $(curl -X GET -H 'Content-Type: application/json' $(echo $lb_url)random/file$(echo $var) -o /dev/null -s -w "%{http_code}\n") -eq 400 ]; then echo "PASSED"; else break; fi done
+    steps:
+      - name: Execute Script
+        working-directory: Terraform/
+        if: github.ref == 'refs/heads/"master"' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
+  
