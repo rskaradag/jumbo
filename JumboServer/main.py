@@ -11,19 +11,19 @@ def get_files():
 @app.route('/<string:id>/<string:filename>', methods=['GET'])
 def get_file(id,filename):
     if os.path.isfile("/mnt/efs/" + id + "-" + filename):
-        return jsonify(Operation="The file exists"), 200
+        return jsonify(Operation="The file exists !"), 200
     else:
-        return jsonify(Operation="The file is not exist"), 400
+        return jsonify(Operation="The file is not exist !"), 400
 
 @app.route('/', methods=['DELETE'])
 def delete_file():
     try:
         json_data=json.loads(request.data)
         os.remove("/mnt/efs/" + json_data["id"] + "-" + json_data["file"])
-        return jsonify(Operation="The file is deleted successfully - " +
+        return jsonify(Operation="The file is deleted successfully ! - " +
                        json_data["id"] + "-" + json_data["file"]), 204
     except:
-        return jsonify(Operation="The file is not found or not exist - " +
+        return jsonify(Operation="The file is not found or not exist ! - " +
                        json_data["id"] + "-" + json_data["file"]), 400
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
