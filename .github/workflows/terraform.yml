@@ -61,6 +61,7 @@ jobs:
     name: "Data Flow test"
     runs-on: ubuntu-latest
     environment: production
+    needs: terraform
     defaults:
       run:
         shell: bash
