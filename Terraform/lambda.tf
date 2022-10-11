@@ -61,7 +61,7 @@ resource "aws_lambda_function" "consumer" {
 
   vpc_config {
 
-    subnet_ids         = [aws_subnet.public[0].id, aws_subnet.public[1].id]
+    subnet_ids         = [aws_subnet.private[0].id, aws_subnet.private[1].id]
     security_group_ids = [aws_security_group.efs-sg.id]
   }
 
