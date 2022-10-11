@@ -1,6 +1,7 @@
 FROM alpine:latest
 
 RUN apk add py3-pip
+
 RUN pip3 install flask
 
 WORKDIR /app
