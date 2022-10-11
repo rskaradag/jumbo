@@ -7,6 +7,8 @@ name: "workflow"
       - master
     tags:
       - "*"
+    paths:
+      - JumboServer/**
   pull_request:
     branches:
       - master
