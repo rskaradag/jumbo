@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+        - JumboServer/**
+env:
+  TF_VAR_AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  TF_VAR_AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_VAR_aws_region: ${{ secrets.AWS_REGION }} 
+  ecr_url: ${{ secrets.ECR_URL }} 
+  app_name: ${{ secrets.APP_NAME }} 
+  
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      -
+        name: Login ECR
+        working-directory: JumboServer
+        run: aws ecr get-login-password --region $aws_region | docker login --username AWS --password-stdin $ecr_url
+      
+      -
+        name: Docker Build
+        working-directory: JumboServer
+        run: docker build -t $app_name -f Dockerfile.webserver . 
+        
+      -
+        name: Tag Image
+        working-directory: JumboServer
+        run: docker tag $app_name:latest $ecr_url:latest 
+      
+      -
+        name: Push Repository
+        working-directory: JumboServer
+        run: docker push $ecr_url:latest
+        
