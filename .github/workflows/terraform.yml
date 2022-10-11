@@ -57,4 +57,17 @@ jobs:
       working-directory: Terraform/
       if: github.ref == 'refs/heads/"master"' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false
-    
+  tests:
+    name: "Data Flow test"
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        shell: bash
+        
+    steps:
+      - name: Execute Script
+        working-directory: Terraform/
+        if: github.ref == 'refs/heads/"master"' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
+  
