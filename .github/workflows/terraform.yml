@@ -4,7 +4,10 @@ on:
   push:
     branches: [ "master" ]
     paths: Terraform/**
-  pull_request:
+  workflow_run:
+    workflows: ["PythonBuild"]
+    types:
+      - completed
 
 permissions:
   contents: read
