@@ -90,9 +90,10 @@ resource "aws_ecs_task_definition" "jumbo_task" {
       "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
-        "awslogs-group": "${var.app_name}-logs-group",
+        "awslogs-group": "/ecs/${var.app_name}-logs-group",
         "awslogs-region": "eu-central-1",
-        "awslogs-stream-prefix": "ecs"
+        "awslogs-stream-prefix": "ecs",
+        "awslogs-create-group": "true"
       }
     }
   }
