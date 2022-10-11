@@ -11,5 +11,4 @@ COPY . .
 EXPOSE 80
 
 CMD ["--host=0.0.0.0", "--port=80"]
-
 ENTRYPOINT ["python3", "main.py"]
