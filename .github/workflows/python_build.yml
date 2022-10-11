@@ -30,20 +30,20 @@ jobs:
       -
         name: Login ECR
         working-directory: JumboServer
-        run: aws ecr get-login-password --region $aws_region | docker login --username AWS --password-stdin $ecr_url
+        run: aws ecr get-login-password --region '$aws_region' | docker login --username AWS --password-stdin '$ecr_url'
       
       -
         name: Docker Build
         working-directory: JumboServer
-        run: docker build -t $app_name -f Dockerfile.webserver . 
+        run: docker build -t '$app_name' -f Dockerfile.webserver . 
         
       -
         name: Tag Image
         working-directory: JumboServer
-        run: docker tag $app_name:latest $ecr_url:latest 
+        run: docker tag '$app_name':latest '$ecr_url':latest 
       
       -
         name: Push Repository
         working-directory: JumboServer
-        run: docker push $ecr_url:latest
+        run: docker push '$ecr_url':latest
         
