@@ -61,5 +61,5 @@ jobs:
     - name: Queue Test
       working-directory: Terraform/
       run: |
-        for var in {1..10}; do curl -X POST -H 'Content-Type: application/json' -d '{"id":"random", "file":"file$var"}' "$apigateway_url"; done
-        for var in {1..10}; do curl -X GET -H 'Content-Type: application/json' "$lb_url"random/file"$var"; if [ $? -eq 0 ]; then echo "OK"; else exit 1; fi done
+        for var in {1..10}; do curl -X POST -H 'Content-Type: application/json' -v -d '{"id":"random", "file":"file'$var'"}' $apigateway_url; done
+        for var in {1..10}; do curl -X GET -H 'Content-Type: application/json' "'$lb_url'random/file'$var'"; if [ $? -eq 0 ]; then echo "OK"; else exit 1; fi done
