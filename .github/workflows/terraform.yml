@@ -4,8 +4,6 @@ on:
   push:
     branches: [ "master" ]
     paths: Terraform/**
-    types:
-      - completed
 
 permissions:
   contents: read
