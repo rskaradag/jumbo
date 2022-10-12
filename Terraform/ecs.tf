@@ -67,11 +67,12 @@ resource "aws_ecs_task_definition" "jumbo_task" {
   cpu                      = "256"
   memory                   = "512"
   task_role_arn            = aws_iam_role.ecs_task_role.arn
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  execution_role_arn       = aws_iam_role.ecs_task_role.arn
   container_definitions    = <<DEFINITION
 [
   {
       "image": "600210043783.dkr.ecr.eu-central-1.amazonaws.com/myjumborepo:latest",
+      "name": "${var.app_name}",
       "portMappings": [
           {
               "hostPort": 80,
@@ -80,7 +81,6 @@ resource "aws_ecs_task_definition" "jumbo_task" {
           }
       ],
       "essential": true,
-      "name": "${var.app_name}",
       "mountPoints": [
           {
               "containerPath": "/mnt/efs",

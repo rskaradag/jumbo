@@ -1,5 +1,5 @@
 resource "aws_iam_role" "api" {
-  name = "my-api-role"
+  name = "${var.app_name}-api-role"
 
   assume_role_policy = <<EOF
 {
@@ -19,7 +19,7 @@ EOF
 }
 
 resource "aws_iam_policy" "api" {
-  name = "my-api-perms"
+  name = "${var.app_name}-api-perms"
 
   policy = <<EOF
 {
@@ -58,34 +58,6 @@ resource "aws_iam_role_policy_attachment" "api" {
   policy_arn = aws_iam_policy.api.arn
 }
 
-
-resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "${var.app_name}-task-execution-role"
-
-  assume_role_policy = <<EOF
-{
- "Version": "2012-10-17",
- "Statement": [
-   {
-     "Action": "sts:AssumeRole",
-     "Principal": {
-       "Service": "ecs-tasks.amazonaws.com"
-     },
-     "Effect": "Allow",
-     "Sid": ""
-   }
- ]
-}
-EOF
-
-  managed_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
-    "arn:aws:iam::aws:policy/AmazonElasticFileSystemClientReadWriteAccess",
-    "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
-  ]
-
-}
-
 resource "aws_iam_role" "ecs_task_role" {
   name = "${var.app_name}-task-role"
 
@@ -106,17 +78,16 @@ resource "aws_iam_role" "ecs_task_role" {
 EOF
 
   managed_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
-    "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
   ]
 }
 
 resource "aws_iam_role_policy_attachment" "efs_task_attachment" {
   role       = aws_iam_role.ecs_task_role.name
-  policy_arn = aws_iam_policy.efs_role_policy.arn
+  policy_arn = aws_iam_policy.ecs_role_policy.arn
 }
 
-resource "aws_iam_policy" "efs_role_policy" {
+resource "aws_iam_policy" "ecs_role_policy" {
   name = "${var.app_name}-efs-perms"
 
   policy = <<EOF
