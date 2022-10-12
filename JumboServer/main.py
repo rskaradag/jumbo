@@ -23,7 +23,7 @@ def delete_file():
         return jsonify(Operation="The file is deleted successfully ! - " +
                        json_data["id"] + "-" + json_data["file"]), 204
     except:
-        return jsonify(Operation="The file is not found or not exist ! - " +
+        return jsonify(Operation="The file is not found or not exist ? - " +
                        json_data["id"] + "-" + json_data["file"]), 400
         
 if __name__ == '__main__':
