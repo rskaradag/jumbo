@@ -33,4 +33,4 @@ The main goal is to provide an example configuration of the following workflow:
 - Update the corresponding ECS Service (by editing the task image)
 - Execute Data Flow test
 
-[cd-success]:(https://github.com/rskaradag/jumbo/actions/runs/3231143245)
+[cd-success](https://github.com/rskaradag/jumbo/actions/runs/3231143245)
