@@ -17,7 +17,7 @@ The following components are deployed:
  -  ECS Cluster / ECS Service / Task Definitions [`./ecs.tf`](./Terraform/ecs.tf).
  -  Elastic Container Registry [`./ecr.tf`](./Terraform/ecr.tf).
  -  Application Load Balancer [`./lb.tf`](./Terraform/lb.tf).
- -  VPC Configuration [`./vpc.tf`](./Terraform/vpc.tf) & [`./networking.tf`](./Terraform/networking.tf).
+ -  VPC Configuration [`./vpc.tf`](./Terraform/vpc.tf).
  -  IAM Roles [`./iam.tf`](./Terraform/iam.tf).
 
 
