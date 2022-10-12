@@ -80,7 +80,7 @@ EOF
 
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
-    "arn:aws:iam::aws:policy/AmazonElasticFileSystemFullAccess",
+    "arn:aws:iam::aws:policy/AmazonElasticFileSystemClientReadWriteAccess",
     "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
   ]
 
