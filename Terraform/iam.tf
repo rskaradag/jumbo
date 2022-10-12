@@ -109,9 +109,9 @@ EOF
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
     "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
   ]
-} 
+}
 
-resource "aws_iam_role_policy_attachment" "efs_task_attachment" { 
+resource "aws_iam_role_policy_attachment" "efs_task_attachment" {
   role       = aws_iam_role.ecs_task_role.name
   policy_arn = aws_iam_policy.efs_role_policy.arn
 }
