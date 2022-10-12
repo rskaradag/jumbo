@@ -1,10 +1,6 @@
 resource "aws_efs_file_system" "jumbo_efs" {
   creation_token = var.app_name
 
-  #lifecycle {
-  #  prevent_destroy = true
-  #}
-
   tags = {
     Name = "${var.app_name}-efs"
   }
