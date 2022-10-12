@@ -25,8 +25,6 @@ resource "aws_api_gateway_model" "producer" {
     "file": { "type": "string" }
     }
 }
-
-
 EOF
 }
 
@@ -94,4 +92,16 @@ resource "aws_api_gateway_deployment" "producer" {
   depends_on = [
     "aws_api_gateway_integration.producer"
   ]
+}
+
+resource "aws_api_gateway_method_settings" "all" {
+  rest_api_id = aws_api_gateway_rest_api.producer.id
+  stage_name  = "main"
+  method_path = "*/*"
+
+  settings {
+    metrics_enabled = true
+    data_trace_enabled = true
+    logging_level   = "INFO"
+  }
 }
