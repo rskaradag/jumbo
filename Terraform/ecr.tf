@@ -1,6 +1,6 @@
 resource "aws_ecr_repository" "jumbo" {
-  name         = "${var.app_name}repo"
-  force_delete = true
+  name                 = "${var.app_name}repo"
+  force_delete         = true
   image_tag_mutability = "IMMUTABLE"
 
   image_scanning_configuration {

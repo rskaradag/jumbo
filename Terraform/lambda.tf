@@ -53,8 +53,8 @@ resource "aws_lambda_function" "consumer" {
   source_code_hash = data.archive_file.zip_the_python_code.output_base64sha256
 
   tracing_config {
-     mode = "Active"
-   }
+    mode = "Active"
+  }
 
   file_system_config {
 
