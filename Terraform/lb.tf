@@ -2,6 +2,8 @@ resource "aws_lb" "lb" {
   name            = "${var.app_name}-lb"
   subnets         = [aws_subnet.public[0].id, aws_subnet.public[1].id]
   security_groups = [aws_security_group.lb.id]
+
+  drop_invalid_header_fields = true
 }
 
 resource "aws_lb_target_group" "lb_target_group" {

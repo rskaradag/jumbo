@@ -4,6 +4,13 @@ resource "aws_sqs_queue" "queue" {
   max_message_size          = 262144
   message_retention_seconds = 86400
   receive_wait_time_seconds = 10
+
+  kms_master_key_id = "${aws_kms_key.aws_kms_key.id}"
+  kms_data_key_reuse_period_seconds = 300
+}
+
+resource "aws_kms_key" "aws_kms_key" {
+  description             = "SQS Key"
 }
 
 resource "aws_sqs_queue_policy" "sqs_queue_policy" {

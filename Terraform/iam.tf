@@ -101,7 +101,7 @@ resource "aws_iam_policy" "ecs_role_policy" {
           "elasticfilesystem:ClientWrite",
           "elasticfilesystem:ClientRootAccess"
         ],
-        "Resource": "*"
+        "Resource": "${aws_efs_file_system.jumbo_efs.arn}"
       }
     ]
 }

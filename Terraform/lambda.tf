@@ -52,6 +52,10 @@ resource "aws_lambda_function" "consumer" {
   runtime          = "python3.9"
   source_code_hash = data.archive_file.zip_the_python_code.output_base64sha256
 
+  tracing_config {
+     mode = "Active"
+   }
+
   file_system_config {
 
     arn = aws_efs_access_point.app.arn
