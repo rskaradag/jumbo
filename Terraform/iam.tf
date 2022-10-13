@@ -47,7 +47,18 @@ resource "aws_iam_policy" "api" {
           "sqs:ListQueueTags"
         ],
         "Resource": "${aws_sqs_queue.queue.arn}"
-      }     
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey"
+        ],
+        "Resource": "*"
+      }
     ]
 }
 EOF
@@ -102,6 +113,17 @@ resource "aws_iam_policy" "ecs_role_policy" {
           "elasticfilesystem:ClientRootAccess"
         ],
         "Resource": "${aws_efs_file_system.jumbo_efs.arn}"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey"
+        ],
+        "Resource": "*"
       }
     ]
 }
