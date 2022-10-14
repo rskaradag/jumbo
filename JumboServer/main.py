@@ -11,9 +11,9 @@ def get_files():
 @app.route('/<string:id>/<string:filename>', methods=['GET'])
 def get_file(id,filename):
     if os.path.isfile("/mnt/efs/" + id + "-" + filename):
-        return jsonify(Operation="The file exists !"), 200
+        return jsonify(Operation="The file exists ! @JUMBO"), 200
     else:
-        return jsonify(Operation="The file is not exist !"), 400
+        return jsonify(Operation="The file is not exist ! @JUMBO"), 400
 
 @app.route('/', methods=['DELETE'])
 def delete_file():
